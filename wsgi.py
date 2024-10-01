@@ -6,6 +6,7 @@ from App.database import db, get_migrate
 from App.models import User
 from App.main import create_app
 from App.controllers import ( create_user, get_all_users_json, get_all_users, initialize )
+from App.controllers import ( create_course, create_staff, assign_staff, view_course_staff )
 
 
 # This commands file allow you to create convenient CLI commands for testing controllers
@@ -49,21 +50,20 @@ def list_user_command(format):
 
 app.cli.add_command(user_cli) # add the group to the cli
 
-'''
-Test Commands
-'''
+create_cli = AppGroup('create', help='create commands')
 
-test = AppGroup('test', help='Testing commands') 
+@app.cli.command('create_course')
+def create_course_command():
+    create_course()
 
-@test.command("user", help="Run User tests")
-@click.argument("type", default="all")
-def user_tests_command(type):
-    if type == "unit":
-        sys.exit(pytest.main(["-k", "UserUnitTests"]))
-    elif type == "int":
-        sys.exit(pytest.main(["-k", "UserIntegrationTests"]))
-    else:
-        sys.exit(pytest.main(["-k", "App"]))
-    
+@app.cli.command('create_staff')
+def create_staff_command():
+    create_staff()
 
-app.cli.add_command(test)
+@app.cli.command('assign_staff')
+def assign_staff_command():
+    assign_staff()
+
+@app.cli.command('view_course_staff')
+def view_course_staff_command():
+    view_course_staff()
